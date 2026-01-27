@@ -14,6 +14,11 @@ cd vendor/
 git clone https://github.com/kaansenol5/tlse
 
 
+## No DOOM?
+
+You need to find doom1.wad (google it) and put it in vibeos_root/games/doom1.wad
+
+
 ## Features
 
 **Core**
@@ -196,5 +201,6 @@ The development of VibeOS is documented across 64 sessions:
 - [Session Log 4](SESSION_LOG_4.md) - Sessions 33-49: TLS/HTTPS, Pi port, USB driver, optimizations
 - [Session Log 5](SESSION_LOG_5.md) - Sessions 50-55: USB fixes, DMA, performance tuning
 - [Session Log 6](SESSION_LOG_6.md) - Sessions 56-64: MicroPython, TCC, DOOM, VibeCode, polish
+
 
 
