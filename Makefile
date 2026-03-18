@@ -121,8 +121,10 @@ QEMU_AUDIO = -audiodev $(AUDIODEV),id=audio0
 QEMU_DISPLAY = -display $(QEMU_DISPLAY_OPT)
 QEMU_FLAGS = -M virt,secure=on -cpu cortex-a72 -m 512M -rtc base=utc,clock=host -global virtio-mmio.force-legacy=false -device ramfb -device virtio-blk-device,drive=hd0 -drive file=$(DISK_IMG),if=none,format=raw,id=hd0 -device virtio-keyboard-device -device virtio-tablet-device -device virtio-sound-device,audiodev=audio0 $(QEMU_AUDIO) -device virtio-net-device,netdev=net0 -netdev user,id=net0 $(QEMU_DISPLAY) -serial stdio -bios $(BUILD_DIR)/vibeos.bin
 QEMU_FLAGS_NOGRAPHIC = -M virt,secure=on -cpu cortex-a72 -m 512M -rtc base=utc,clock=host -global virtio-mmio.force-legacy=false -device virtio-blk-device,drive=hd0 -drive file=$(DISK_IMG),if=none,format=raw,id=hd0 -device virtio-sound-device,audiodev=audio0 $(QEMU_AUDIO) -device virtio-net-device,netdev=net0 -netdev user,id=net0 -nographic -bios $(BUILD_DIR)/vibeos.bin
+QEMU_FLAGS_VNC = -M virt,secure=on -cpu cortex-a72 -m 512M -rtc base=utc,clock=host -global virtio-mmio.force-legacy=false -device virtio-blk-device,drive=hd0 -drive file=$(DISK_IMG),if=none,format=raw,id=hd0 -device virtio-net-device,netdev=net0 -netdev user,id=net0 -device virtio-sound-device,audiodev=audio0 $(QEMU_AUDIO) -device virtio-keyboard-device -device virtio-tablet-device -device ramfb -display none -vnc :0 -serial stdio -bios $(BUILD_DIR)/vibeos.bin
+QEMU_FLAGS_SPICE = -M virt,secure=on -cpu cortex-a72 -m 512M -rtc base=utc,clock=host -global virtio-mmio.force-legacy=false -device virtio-blk-device,drive=hd0 -drive file=$(DISK_IMG),if=none,format=raw,id=hd0 -device virtio-net-device,netdev=net0 -netdev user,id=net0 -device virtio-sound-device,audiodev=audio0 $(QEMU_AUDIO),id=audio0 -device virtio-keyboard-device -device virtio-tablet-device -device ramfb -spice port=5900,disable-ticketing=on -serial stdio -bios $(BUILD_DIR)/vibeos.bin
 
-.PHONY: all clean run run-nographic run-pi user install disk pi pi-debug sync-disk
+.PHONY: all clean run run-nographic run-vnc run-spice run-pi user install disk pi pi-debug sync-disk
 
 all: $(KERNEL_BIN)
 	@echo ""
@@ -305,6 +307,12 @@ run: $(KERNEL_BIN) sync-disk
 
 run-nographic: $(KERNEL_BIN) sync-disk
 	$(QEMU) $(QEMU_FLAGS_NOGRAPHIC)
+
+run-vnc: $(KERNEL_BIN) sync-disk
+	$(QEMU) $(QEMU_FLAGS_VNC)
+
+run-spice: $(KERNEL_BIN) sync-disk
+	$(QEMU) $(QEMU_FLAGS_SPICE)
 
 # Run Pi kernel in QEMU raspi3b (no disk - just tests boot)
 run-pi: pi
