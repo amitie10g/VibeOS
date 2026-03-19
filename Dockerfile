@@ -17,8 +17,7 @@ RUN apt-get update && apt-get install -y \
         python3 \
         qemu-system-aarch64 \
         rsync \
-        sudo \
-        unzip
+        sudo
 
 WORKDIR /root/vibeos
 COPY --from=downloader $DOOM1_WAD ./vibeos_root/games/doom1.wad
